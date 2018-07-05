@@ -5,120 +5,73 @@ import bs4
 import yaml
 import mistune
 
-BASE_URL = 'https://github.com/infamily/indb/tree/master/wiki'
 
-#
-# def Concept(infinity_uri):
-#
-#     if isinstance(infinity_uri, str):
-#         _concept = json.loads(requests.get().content)
-#
-#     elif isinstance(infinity_uri, dict):
-#         _concept = {
-#             'entities': {
-#                 'Q0': {
-#                     'aliases':
-#                        {v:[{'value':wikidata_id[v], 'language': v}]
-#                         for k,v in enumerate(wikidata_id)},
-#                     'claims': {}
-#                 }
-#             }
-#         }
-#         wikidata_id = 'Q0'
-#
-#     else:
-#         return None
-#
-#     class Name(): pass
-#
-#     def _init(self, details={}, fact=False):
-#         self.details = details
-#         self.fact = fact
-#         if self.fact:
-#             self.sign = '.'
-#         else:
-#             self.sign = '*'
-#
-#         try:
-#             self.alias = _alias
-#         except:
-#             self.alias = None
-#
-#         self.aliases = self.__class__.concept['entities'][wikidata_id]['aliases']
-#         self.claims = self.__class__.concept['entities'][wikidata_id]['claims']
-#
-#     def _repr(self):
-#         if self.details:
-#
-#     def _unicode(self):
-#         return '%s%s' % (self.sign, self.alias,)
-#
-#     Name.__name__ = str(infinity_uri)
-#     Name.__init__ = _init
-#     Name.__repr__ = _repr
-#     Name.__unicode__ = _unicode
-#
-#     return Name
-#
+from .wikidata import get_lang
 
 
+def Concept(infinity_uri):
 
-# def DemoConcept(infinity_uri):
-#
-#     _languages = _concept['entities'][wikidata_id]['aliases'].keys()
-#     _descriptions = _concept['entities'][wikidata_id]['descriptions']
-#     _alias = get_lang(_concept['entities'][wikidata_id]['aliases'], _popular)[0]['value']
-#
-#
-#     class Name(): pass
-#
-#     def _init(self, details={}, fact=False):
-#         self.details = details
-#
-#     def _neg(self):
-#         return self
-#
-#
-#     def _set_langs(self, language_codes):
-#         '''
-#         INPUT
-#         languages a list of language codes, in order of priority to be displayed
-#         if exists
-#
-#         OUTPUT
-#         sets the .alias, which is used in __repr__
-#         '''
-#         self.languages = language_codes
-#         self.alias = get_lang(self.aliases, self.languages)[0]['value']
-#
-#
-#     def _repr(self):
-#         if self.details:
-#
-#     def _unicode(self):
-#         return '%s%s' % (self.sign, self.alias,)
-#
-#
-#     def _sub(self, other):
-#         result = copy.deepcopy(self)
-#
-#     Name.__name__ = str(wikidata_id)
-#     Name.concept = _concept
-#     Name.__init__ = _init
-#     Name.__unicode__ = _unicode
-#     Name.__repr__ = _repr
-#     Name.set_langs = _set_langs
-#     Name.languages = _languages
-#     Name.descriptions = _descriptions
-#     Name.__doc__ =  _doc
-#     Name.__neg__ = _neg
-#     Name.__sub__ = _sub
-#
-#     return Name
-#
-#
-#
+    if isinstance(infinity_uri, str):
+        _concept = get_concept(infinity_uri)
 
+    elif isinstance(infinity_uri, dict):
+        # Example.
+        _concept = {
+            'aliases':
+                {'en': ['one','two','three'],
+                 'lt': ['vien', 'du', 'try']},
+            'description': {
+                'en': 'number',
+                'lt': 'skaicius'},
+            'claims': {},
+            'formats': {},
+            'references': []
+        }
+
+    else:
+        return
+
+    try:
+        _alias = _concept['aliases'][
+            list(_concept['aliases'].keys())[0]
+        ][0]
+    except:
+        _alias = "Undefined"
+
+
+    def _init(self, details={}, fact=False):
+        self.details = details
+        self.fact = fact
+        if self.fact:
+            self.sign = '.'
+        else:
+            self.sign = '*'
+
+        try:
+            self.alias = _alias
+        except:
+            self.alias = None
+
+    def _repr(self):
+        if self.details:
+            return '{}{} ({})'.format(c.sign, c.alias, c.details)
+
+        else:
+            return '{}{}'.format(self.sign, self.alias)
+
+    def _unicode(self):
+        return '%s%s' % (self.sign, self.alias,)
+
+
+    class Name(): pass
+
+    Name.concept = _concept
+    Name.__name__ = str(infinity_uri)
+    Name.__init__ = _init
+    Name.__repr__ = _repr
+    Name.__unicode__ = _unicode
+
+    return Name
 
 
 def get_concept(path):
@@ -183,8 +136,12 @@ def get_source(path):
                     'https://raw.githubusercontent.com/',
                     'https://raw.githubusercontent.com/wiki/'
                 )
-                # Affix .md
-                path = path.replace('#', '.md#')
+                if '#' in path:
+                    # Affix .md
+                    path = path.replace('#', '.md#')
+
+                elif not path.endswith('.md'):
+                    path += '.md'
 
 
     if str(path).startswith('http'):
