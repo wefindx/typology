@@ -20,7 +20,7 @@ def Concept(infinity_uri):
             'aliases':
                 {'en': ['one','two','three'],
                  'lt': ['vien', 'du', 'try']},
-            'description': {
+            'descriptions': {
                 'en': 'number',
                 'lt': 'skaicius'},
             'claims': {},
@@ -68,6 +68,7 @@ def Concept(infinity_uri):
 
     Name.concept = _concept
     Name.aliases = _concept.get('aliases')
+    Name.descriptions = _concept.get('descriptions')
     Name.__name__ = str(infinity_uri)
     Name.__init__ = _init
     Name.__repr__ = _repr
