@@ -63,10 +63,11 @@ def Concept(infinity_uri):
         return '%s%s' % (self.sign, self.alias,)
 
 
+
     class Name(): pass
 
     Name.concept = _concept
-    Name.aliases = _aliases
+    Name.aliases = _concept.get('aliases')
     Name.__name__ = str(infinity_uri)
     Name.__init__ = _init
     Name.__repr__ = _repr
