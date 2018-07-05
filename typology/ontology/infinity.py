@@ -66,6 +66,7 @@ def Concept(infinity_uri):
     class Name(): pass
 
     Name.concept = _concept
+    Name.aliases = _aliases
     Name.__name__ = str(infinity_uri)
     Name.__init__ = _init
     Name.__repr__ = _repr
