@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import metawiki
 import requests
 import json
 import bs4
@@ -10,6 +11,8 @@ from .wikidata import get_lang
 
 
 def Concept(infinity_uri):
+
+    infinity_uri = metawiki.name_to_url(infinity_uri)
 
     if isinstance(infinity_uri, str):
         _concept = get_concept(infinity_uri)
