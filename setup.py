@@ -1,8 +1,11 @@
+# Copyright (c) 2018 WeFindX Foundation, CLG.
+# All Rights Reserved.
+
 from setuptools import find_packages, setup
 
 setup(
     name='typology',
-    version='0.0.8',
+    version='0.0.9',
     description='Python formats derived from vocabulary concepts.',
     url='https://gitlab.com/wefindx/typology',
     author='Mindey',
