@@ -253,6 +253,10 @@ def Concept(wikidata_id):
 
     _doc = """%s (%s)\n\nPropositions\n============\n%s\n\nQualities (P1552)\n=================\n%s""" % (wikidata_id, _aliases, propositions, qualities)
 
+    _concept['aliases'] = copy.copy(_aliases)
+    _descriptions = {v: _descriptions[v]['value'] for k,v in enumerate(_descriptions)}
+    _concept['descriptions'] = copy.copy(_descriptions)
+
     Name.__name__ = str(wikidata_id)
     Name.concept = _concept
     Name.__init__ = _init
