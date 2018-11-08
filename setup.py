@@ -5,12 +5,12 @@ from setuptools import find_packages, setup
 
 setup(
     name='typology',
-    version='0.1.0',
+    version='0.1.2',
     description='Python formats derived from vocabulary concepts.',
-    url='https://gitlab.com/wefindx/typology',
+    url='https://github.com/wefindx/typology',
     author='Mindey',
     author_email='mindey@qq.com',
-    license='ASK FOR PERMISSIONS',
+    license='AGPL',
     packages = find_packages(exclude=['docs', 'tests*']),
     install_requires=['metawiki', 'requests', 'bs4', 'mistune', 'PyYAML'],
     extras_require = {

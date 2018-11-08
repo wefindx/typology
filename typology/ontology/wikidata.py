@@ -149,6 +149,10 @@ def Concept(wikidata_id):
     # http://chimera.labs.oreilly.com/books/1230000000393/ch09.html#_defining_classes_programmatically
 
     if isinstance(wikidata_id, str):
+        if wikidata_id.startswith('https://www.wikidata.org/wiki/'):
+            wikidata_id = wikidata_id.rsplit('https://www.wikidata.org/wiki/')[-1]
+        elif wikidata_id.startswith('WD:Q') or wikidata_id.startswith('WD:P'):
+            wikidata_id = wikidata_id[3:]
         _concept = get_json(wikidata_id)
     elif isinstance(wikidata_id, dict):
         _concept = {'entities': {'Q0': {'aliases': {v:[{'value':wikidata_id[v], 'language': v}] for k,v in enumerate(wikidata_id)}, 'claims': {} }} }
@@ -164,10 +168,10 @@ def Concept(wikidata_id):
     except:
         _alias = None
 
-    _aliases = '|'
+    _aliases = {}
     for k,v in enumerate(_concept['entities'][wikidata_id]['aliases']):
-        l = _concept['entities'][wikidata_id]['aliases'][v][0]
-        _aliases += ' %s: %s |' % (l['language'], l['value'])
+        L = _concept['entities'][wikidata_id]['aliases'][v]
+        _aliases[v] = [l['value'] for l in L]
 
     class Name(): pass
 
@@ -257,6 +261,7 @@ def Concept(wikidata_id):
     Name.set_langs = _set_langs
     Name.languages = _languages
     Name.descriptions = _descriptions
+    Name.aliases = _aliases
     Name.__doc__ =  _doc
     Name.__neg__ = _neg
     Name.__sub__ = _sub
