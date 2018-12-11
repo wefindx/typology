@@ -14,6 +14,27 @@ from typology.ontology.infinity import get_source
 
 MAX_HEADER_LEVEL_TO_LOOK = 7
 
+
+from slugify import slugify
+
+
+def slug(url, skip_valid=True):
+
+    if skip_valid:
+        if metawiki.isname(url):
+            return url
+
+    # exception
+    if url == '-':
+        return url
+
+    if '#' in url:
+        url, anchor = url.rsplit('#', 1)
+        return '{}#{}'.format(slugify(url), slugify(anchor))
+    else:
+        return slugify(url)
+
+
 def include_extensions(schema, target, name=''):
 
     if '_:extends' in schema.keys():
