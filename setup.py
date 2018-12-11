@@ -12,7 +12,7 @@ setup(
     author_email='mindey@qq.com',
     license='AGPL',
     packages = find_packages(exclude=['docs', 'tests*']),
-    install_requires=['metawiki', 'requests', 'bs4', 'mistune', 'PyYAML'],
+    install_requires=['metawiki', 'requests', 'bs4', 'mistune', 'PyYAML', 'python-slugify', 'boltons'],
     extras_require = {
         'test': ['coverage', 'pytest', 'pytest-cov'],
     },
