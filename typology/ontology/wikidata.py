@@ -3,6 +3,7 @@ import json
 import requests
 import copy
 import metawiki
+from hanziconv import HanziConv
 
 BASE_URL = 'https://www.wikidata.org/w/api.php'
 
@@ -18,7 +19,7 @@ def get_json(wikidata_id):
     except:
         return {'success': False}
 
-def get_lang(d, languages=['en', 'zh', 'de', 'ru', 'fr']):
+def get_lang(d, languages=['en', 'zh', 'de', 'ru', 'fr', 'cn']):
     '''
     INPUT
     d :         dictionary with keys as language codes
@@ -162,7 +163,7 @@ def Concept(wikidata_id):
         return None
 
     _languages = _concept['entities'][wikidata_id]['aliases'].keys()
-    _popular = ['en', 'es', 'de', 'fr', 'ru', 'zh']
+    _popular = ['en', 'es', 'de', 'fr', 'ru', 'zh', 'cn']
     _descriptions = _concept['entities'][wikidata_id]['descriptions']
     try:
         _alias = get_lang(_concept['entities'][wikidata_id]['aliases'], _popular)[0]['value']
@@ -257,6 +258,26 @@ def Concept(wikidata_id):
     _concept['aliases'] = copy.copy(_aliases)
     _descriptions = {v: _descriptions[v]['value'] for k,v in enumerate(_descriptions)}
     _concept['descriptions'] = copy.copy(_descriptions)
+
+    if 'cn' not in _aliases:
+        if 'zh-cn' in _aliases:
+            _aliases['cn'] = _aliases['zh-cn']
+        elif 'zh-hans' in _aliases:
+            _aliases['cn'] = _aliases['zh-hans']
+        elif 'zh' in _aliases:
+            _aliases['cn'] = [HanziConv.toSimplified(item) for item in _aliases['zh']]
+        elif 'zh-hant' in _aliases:
+            _aliases['cn'] = [HanziConv.toSimplified(item) for item in _aliases['zh-hant']]
+        elif 'zh-hk' in _aliases:
+            _aliases['cn'] = [HanziConv.toSimplified(item) for item in _aliases['zh-hk']]
+        elif 'zh-mo' in _aliases:
+            _aliases['cn'] = [HanziConv.toSimplified(item) for item in _aliases['zh-mo']]
+        elif 'zh-my' in _aliases:
+            _aliases['cn'] = [HanziConv.toSimplified(item) for item in _aliases['zh-my']]
+        elif 'zh-sg' in _aliases:
+            _aliases['cn'] = [HanziConv.toSimplified(item) for item in _aliases['zh-sg']]
+        elif 'zh-tw' in _aliases:
+            _aliases['cn'] = [HanziConv.toSimplified(item) for item in _aliases['zh-tw']]
 
     Name.__name__ = str(wikidata_id)
     Name.concept = _concept
