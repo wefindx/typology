@@ -2,6 +2,7 @@
 import json
 import requests
 import copy
+import metawiki
 
 BASE_URL = 'https://www.wikidata.org/w/api.php'
 
@@ -269,6 +270,10 @@ def Concept(wikidata_id):
     Name.__doc__ =  _doc
     Name.__neg__ = _neg
     Name.__sub__ = _sub
+
+    n = 'WD:'+Name.__name__
+    Name.id = metawiki.url_to_name(n) if n.startswith('http') else n
+    Name.url = metawiki.name_to_url(n) if not n.startswith('http') else n
 
     return Name
 

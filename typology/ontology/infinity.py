@@ -69,13 +69,17 @@ def Concept(infinity_uri):
 
     class Name(): pass
 
+    n = str(infinity_uri)
     Name.concept = _concept
     Name.aliases = _concept.get('aliases')
     Name.descriptions = _concept.get('descriptions')
-    Name.__name__ = str(infinity_uri)
+    Name.__name__ = n
     Name.__init__ = _init
     Name.__repr__ = _repr
     Name.__unicode__ = _unicode
+    Name.id = metawiki.url_to_name(n) if n.startswith('http') else n
+    Name.url = metawiki.name_to_url(n) if not n.startswith('http') else n
+
 
     return Name
 
