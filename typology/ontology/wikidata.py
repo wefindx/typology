@@ -175,6 +175,11 @@ def Concept(wikidata_id):
         L = _concept['entities'][wikidata_id]['aliases'][v]
         _aliases[v] = [l['value'] for l in L]
 
+    _labels = {}
+    for k,v in enumerate(_concept['entities'][wikidata_id]['labels']):
+        L = _concept['entities'][wikidata_id]['labels'][v]
+        _labels[v] = [L['value']]
+
     class Name(): pass
 
     def _init(self, details={}, fact=False):
@@ -191,6 +196,7 @@ def Concept(wikidata_id):
             self.alias = None
 
         self.aliases = self.__class__.concept['entities'][wikidata_id]['aliases']
+        self.labels = self.__class__.concept['entities'][wikidata_id]['labels']
         self.claims = self.__class__.concept['entities'][wikidata_id]['claims']
 
     def _neg(self):
@@ -207,6 +213,7 @@ def Concept(wikidata_id):
         '''
         self.languages = language_codes
         self.alias = get_lang(self.aliases, self.languages)[0]['value']
+        self.label = get_lang(self.labels, self.languages)['value']
 
     def _repr(self):
         if self.details:
@@ -256,6 +263,7 @@ def Concept(wikidata_id):
     _doc = """%s (%s)\n\nPropositions\n============\n%s\n\nQualities (P1552)\n=================\n%s""" % (wikidata_id, _aliases, propositions, qualities)
 
     _concept['aliases'] = copy.copy(_aliases)
+    _concept['labels'] = copy.copy(_labels)
     _descriptions = {v: _descriptions[v]['value'] for k,v in enumerate(_descriptions)}
     _concept['descriptions'] = copy.copy(_descriptions)
 
@@ -279,6 +287,27 @@ def Concept(wikidata_id):
         elif 'zh-tw' in _aliases:
             _aliases['cn'] = [HanziConv.toSimplified(item) for item in _aliases['zh-tw']]
 
+    if 'cn' not in _labels:
+        if 'zh-cn' in _labels:
+            _labels['cn'] = _labels['zh-cn']
+        elif 'zh-hans' in _labels:
+            _labels['cn'] = _labels['zh-hans']
+        elif 'zh' in _labels:
+            _labels['cn'] = [HanziConv.toSimplified(item) for item in _labels['zh']]
+        elif 'zh-hant' in _labels:
+            _labels['cn'] = [HanziConv.toSimplified(item) for item in _labels['zh-hant']]
+        elif 'zh-hk' in _labels:
+            _labels['cn'] = [HanziConv.toSimplified(item) for item in _labels['zh-hk']]
+        elif 'zh-mo' in _labels:
+            _labels['cn'] = [HanziConv.toSimplified(item) for item in _labels['zh-mo']]
+        elif 'zh-my' in _labels:
+            _labels['cn'] = [HanziConv.toSimplified(item) for item in _labels['zh-my']]
+        elif 'zh-sg' in _labels:
+            _labels['cn'] = [HanziConv.toSimplified(item) for item in _labels['zh-sg']]
+        elif 'zh-tw' in _labels:
+            _labels['cn'] = [HanziConv.toSimplified(item) for item in _labels['zh-tw']]
+
+
     Name.__name__ = str(wikidata_id)
     Name.concept = _concept
     Name.__init__ = _init
@@ -287,7 +316,8 @@ def Concept(wikidata_id):
     Name.set_langs = _set_langs
     Name.languages = _languages
     Name.descriptions = _descriptions
-    Name.aliases = _aliases
+    Name.aliases = _labels
+    Name.labels = _aliases
     Name.__doc__ =  _doc
     Name.__neg__ = _neg
     Name.__sub__ = _sub
