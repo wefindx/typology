@@ -4,7 +4,6 @@
 import os
 import bs4
 import yaml
-import slugify
 import mistune
 import metawiki
 
@@ -108,7 +107,7 @@ def get_schema(path):
         header = None
 
         for header in headers:
-            anchor_slug = slugify.slugify(header.text)
+            anchor_slug = slugify(header.text)
 
             if anchor_slug == anchor:
                 break
@@ -143,7 +142,7 @@ def get_schema(path):
                 'code', {'class': 'lang-yaml'})
 
             if target:
-                anchor_slug = slugify.slugify(header.text)
+                anchor_slug = slugify(header.text)
 
                 schema = keys_to_str(yaml.load(target.text))
                 schema = values_to_name(schema)
