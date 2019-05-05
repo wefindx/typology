@@ -106,7 +106,7 @@ def get_concept(path):
     target = soup.find(
         'code', {'class': 'lang-yaml'})
 
-    concept = yaml.load(target.text)
+    concept = yaml.load(target.text, Loader=yaml.FullLoader)
 
     headers = soup.find_all('h2')
 
@@ -119,7 +119,7 @@ def get_concept(path):
             'code', {'class': 'lang-yaml'})
 
         if target:
-            formats[header.text] = yaml.load(target.text)
+            formats[header.text] = yaml.load(target.text, Loader=yaml.FullLoader)
 
     if concept:
         if formats:
