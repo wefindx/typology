@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='typology',
-    version='0.2.0',
+    version='0.2.1',
     description='Python formats derived from vocabulary concepts.',
     url='https://github.com/wefindx/typology',
     author='Mindey',

@@ -122,7 +122,7 @@ def get_schema(path):
 
                 if target:
 
-                    schema = keys_to_str(yaml.load(target.text))
+                    schema = keys_to_str(yaml.load(target.text, Loader=yaml.FullLoader))
                     schema = values_to_name(schema)
 
                     # Expand, if has '_:extends' token.
@@ -144,7 +144,7 @@ def get_schema(path):
             if target:
                 anchor_slug = slugify(header.text)
 
-                schema = keys_to_str(yaml.load(target.text))
+                schema = keys_to_str(yaml.load(target.text, Loader=yaml.FullLoader))
                 schema = values_to_name(schema)
 
                 # Expand, if has '_:extends' token.
