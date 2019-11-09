@@ -6,8 +6,8 @@ def test_infinity_properties():
     After all, we want to index the real items of the world.
     '''
 
-    KeyEvent = infinity.Concept('IN:mindey/keylogger-event')
-    Date = infinity.Concept('https://github.com/infamily/indb/wiki/date')
+    KeyEvent = infinity.Concept('GH:mindey/ooio/keylogger-event')
+    Date = infinity.Concept('https://github.com/infamily/terms/wiki/date')
 
     # We want a keyevent with 4 legs, owned by Alice.
     key = KeyEvent({'legs': 4, 'owner': 'Alice'})

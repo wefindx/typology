@@ -62,7 +62,7 @@ def include_extensions(schema, target, name=''):
     return schema, target
 
 
-# Replicated in pypi:metaformat.
+# Replicated[wrapped with cache] in pypi:metaformat.
 def get_schema(path):
     '''
     Retrieves all app schemas.
@@ -101,13 +101,15 @@ def get_schema(path):
     for header_level in range(1, MAX_HEADER_LEVEL_TO_LOOK):
         headers.extend(soup.find_all('h{}'.format(header_level)))
 
+    # import ipdb; ipdb.set_trace()
 
     if anchor:
 
         header = None
 
         for header in headers:
-            anchor_slug = slugify(header.text)
+            # additionally, github slugifies by replacing dots with ''
+            anchor_slug = slugify(header.text.replace('.',''))
 
             if anchor_slug == anchor:
                 break
@@ -117,8 +119,9 @@ def get_schema(path):
 
             if content:
 
-                target = content.find(
-                    'code', {'class': 'lang-yaml'})
+                # target = content.find(
+                #     'code', {'class': 'lang-yaml'})
+                target = content.find('code')
 
                 if target:
 
@@ -138,11 +141,12 @@ def get_schema(path):
         for header in headers:
             content = header.find_next_sibling()
 
-            target = content.find(
-                'code', {'class': 'lang-yaml'})
+            # target = content.find(
+            #     'code', {'class': 'lang-yaml'})
+            target = content.find('code')
 
             if target:
-                anchor_slug = slugify(header.text)
+                anchor_slug = slugify(header.text.replace('.',''))
 
                 schema = keys_to_str(yaml.load(target.text, Loader=yaml.FullLoader))
                 schema = values_to_name(schema)
